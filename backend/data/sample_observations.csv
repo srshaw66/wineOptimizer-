@@ -1,0 +1,4 @@
+plant_id,date,coverage,status
+plant:A:1:3,2026-10-09,62,Flagged for inspection
+plant:A:1:2,2026-10-09,84,Normal
+plant:B:2:4,2026-10-09,68,Flagged for inspection
