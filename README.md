@@ -55,6 +55,8 @@ For PowerShell on Windows, the virtual environment activation command is `.venv\
 - `frontend/`: React, TypeScript, React Leaflet, CSS; no online tile dependency.
 - `backend/app/services/sample_store.py`: replaceable local repository.
 - `backend/app/adapters/`: input adapter interface and CSV sample.
+- `backend/app/ingestion/`: registry, CSV/XLSX adapters, mapping, normalization, SQLite persistence, and import service.
+- `backend/tests/`: synthetic importer tests.
 - `backend/app/mapping/`: modules for GeoPandas, Folium, Mapclassify, Matplotlib.
 - `supabase/migrations/`: placeholder for hosted database, access policies and future authentication.
 
@@ -74,6 +76,26 @@ These heavier dependencies are **not required to launch the local prototype**. T
 - `GET /api/observations/plant:A:1:3`
 - `GET /api/blocks.geojson`
 - `GET /api/geo/status`
+- `POST /api/imports/preview` — multipart `.csv` or `.xlsx`, returns tables, samples, mappings, warnings, and an import id.
+- `POST /api/imports/confirm` — JSON `{import_id, vineyard_id, mappings, units}`; transactionally persists valid observations.
+- `GET /api/imports/{import_id}`
+- `GET /api/vineyards/{vineyard_id}/observations`
+- `GET /api/vineyards/{vineyard_id}/data-types`
+
+## Importer
+
+The importer follows `source adapter → extraction → column mapping → normalization/validation → unified observation → persistence`. Adapters share the `SourceAdapter` contract and are selected by file extension through `adapter_registry`; a future GeoJSON, sensor, or external API adapter can be added without changing the confirmation pipeline.
+
+The local SQLite database is created at `backend/data/vineyard.sqlite3` (override with `VINEYARD_DB_PATH`). Excel files are opened in read-only, formula-preserving mode; formulas are never evaluated and unavailable cached results are reported as warnings. A 10 MB upload limit is enforced. Unknown blocks are rejected for review, unmapped fields are retained in observation metadata, and duplicate fingerprints are skipped.
+
+Run importer tests with:
+
+```bash
+cd backend
+PYTHONPATH=. pytest -q tests
+```
+
+For manual testing, start the backend, open the frontend's **Data** tab, choose a CSV/XLSX file, review mappings and warnings, enter a vineyard id, and confirm the import. The current local prototype does not yet provide vineyard/block management UI; seed known blocks in SQLite before importing block-linked observations.
 
 ## When deploying with accounts later
 1. Implement a Supabase repository in place of the mock source and switch the frontend service adapter.

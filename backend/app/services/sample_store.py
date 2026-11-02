@@ -3,7 +3,9 @@ from datetime import date, timedelta
 
 BLOCKS = [dict(id='A',left=80,right=440,bottom=405,top=645,rows=3),dict(id='B',left=550,right=920,bottom=405,top=645,rows=3),dict(id='C',left=80,right=920,bottom=75,top=325,rows=4)]
 
-def features():
+def features(vineyard_id=None):
+    if vineyard_id is not None and vineyard_id not in {'sonoma-demo', 'vineyard'}:
+        return []
     result=[dict(id='vineyard',kind='vineyard',name='Sonoma Vineyard',parentId=None,center=[350,500],bounds=[[55,60],[665,940]])]
     for block in BLOCKS:
         b=block
