@@ -6,3 +6,13 @@ __pycache__/
 .env
 .env.local
 .DS_Store
+.run-logs/
+.pytest_cache/
+*.tsbuildinfo
+# Local data: SQLite database (layouts, alerts, imports), uploaded photos and map images
+backend/data/*.sqlite3
+backend/data/*.sqlite3-*
+backend/data/photos/
+backend/data/maps/
+# Local tool config
+.claude/

@@ -1,9 +1,8 @@
 """Optional GeoPandas operations. Requires requirements-geo.txt."""
-from app.services.sample_store import geojson
+from app.sensors.sites import DEFAULT_SITE_ID, site_geometry
 
-def vineyard_geodataframe():
+
+def site_geodataframe(site_id: str = DEFAULT_SITE_ID):
     import geopandas as gpd
-    from shapely.geometry import shape
-    data=geojson()['features']
-    # Demo map coordinates are abstract, NOT geographic GPS coordinates.
-    return gpd.GeoDataFrame([{'block':x['properties']['blockId'],'geometry':shape(x['geometry'])} for x in data])
+    # GeoJSON is WGS84 lon/lat; reproject (e.g. to EPSG:32610) before measuring areas or distances.
+    return gpd.GeoDataFrame.from_features(site_geometry(site_id)['features'], crs='EPSG:4326')
