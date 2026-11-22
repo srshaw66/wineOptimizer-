@@ -16,11 +16,18 @@ Stack: React + TypeScript + React Leaflet (Vite) frontend; FastAPI + local SQLit
 
 ## Quick start
 
-Requirements: Node.js 20+, Python 3.10+.
+Requirements: Python 3.9+ and Node.js 18+ (20 LTS recommended). Internet is needed once, for the first install.
 
-**Easiest (macOS):** double-click `scripts/Run VineyardOS.command`. It sets up dependencies on first
-run, starts the backend and app on free ports (8000/5173 if available), opens the browser, and stops
-both when you close its window. Logs go to `.run-logs/`.
+**Easiest: run `Start VineyardOS.command` in the project folder.**
+
+- **macOS:** double-click it. The first time, macOS may block a downloaded script: right-click it → **Open** → **Open**.
+- **Linux:** `./"Start VineyardOS.command"` (or `bash "Start VineyardOS.command"`).
+
+It checks Python and Node, installs packages on the first run (and again only if the requirement files
+change), starts the backend and app on free ports (8000/5173 if available), and opens the app in your
+**default browser** (`open` on macOS, `xdg-open` on Linux, `wslview` on WSL). Closing its window or pressing
+Ctrl+C stops both servers. Logs go to `.run-logs/`. Windows is not covered by the launcher; use WSL or the
+manual steps below.
 
 Or start them manually:
 
